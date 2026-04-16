@@ -25,17 +25,20 @@ jobs:
         distribution: 'temurin'
         cache: gradle
     
-    - name: Download Gradle Wrapper if missing
+    - name: Download Gradle Wrapper JAR directly
       run: |
-        if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
-          echo "Downloading Gradle 8.0..."
-          mkdir -p gradle/wrapper
-          curl -L https://services.gradle.org/distributions/gradle-8.0-bin.zip -o gradle-8.0.zip
-          unzip -q gradle-8.0.zip
-          cp gradle-8.0/lib/plugins/gradle-wrapper-8.0.jar gradle/wrapper/gradle-wrapper.jar
-          rm -rf gradle-8.0 gradle-8.0.zip
-          echo "✅ Gradle Wrapper JAR downloaded"
-        fi
+        mkdir -p gradle/wrapper
+        
+        # Скачиваем JAR напрямую с официального репозитория Gradle
+        curl -L https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
+        
+        # Проверяем размер
+        ls -lh gradle/wrapper/gradle-wrapper.jar
+        
+        # Проверяем, что это Zip архив
+        file gradle/wrapper/gradle-wrapper.jar
+        
+        echo "✅ Gradle Wrapper JAR скачан"
     
     - name: Make gradlew executable
       run: chmod +x ./gradlew
