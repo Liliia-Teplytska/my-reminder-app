@@ -31,7 +31,7 @@ jobs:
           mkdir -p gradle/wrapper
           curl -L https://services.gradle.org/distributions/gradle-8.0-bin.zip -o gradle-8.0.zip
           unzip -q gradle-8.0.zip
-          cp gradle-8.0/gradle/wrapper/gradle-wrapper.jar gradle/wrapper/
+          cp gradle-8.0\lib\plugins\gradle-wrapper-8.0.jar gradle/wrapper/
           rm -rf gradle-8.0 gradle-8.0.zip
         fi
     
