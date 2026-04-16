@@ -1,0 +1,29 @@
+image: gitpod/workspace-full
+
+tasks:
+  - init: |
+      # Обновление пакетов
+      apt-get update
+      
+      # Установка Java 11
+      apt-get install -y openjdk-11-jdk
+      
+      # Установка Android SDK
+      apt-get install -y android-sdk
+      
+      # Установка Gradle
+      apt-get install -y gradle
+      
+      # Установка дополнительных инструментов
+      apt-get install -y git wget unzip
+      
+      echo "✅ Все зависимости установлены!"
+      java -version
+      gradle --version
+
+vscode:
+  extensions:
+    - vscjava.extension-pack-for-java
+    - redhat.java
+    - gradle.gradle-for-java
+    - ms-vscode.makefile-tools
