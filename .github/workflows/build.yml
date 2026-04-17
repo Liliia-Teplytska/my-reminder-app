@@ -15,20 +15,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Set up JDK 11
+    - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
         distribution: 'temurin'
         cache: gradle
     
-    - name: Recreate Gradle Wrapper
-      run: |
-        echo "Recreating Gradle Wrapper..."
-        rm -rf gradle/
-        gradle wrapper --gradle-version 8.10.1
-        chmod +x ./gradlew
-        echo "✅ Gradle Wrapper recreated"
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
     
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
