@@ -38,19 +38,27 @@ jobs:
         echo "Extracting Gradle..."
         unzip -q /tmp/gradle-8.0.zip -d /tmp/
         
-        # Копируем JAR из ПРАВИЛЬНОГО пути: gradle/wrapper/gradle-wrapper.jar
-        echo "Copying gradle-wrapper.jar..."
-        cp /tmp/gradle-8.0/gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.jar
+        # Копируем ГЛАВНЫЙ JAR файл из lib/plugins/
+        echo "Copying gradle-wrapper.jar from lib/plugins/..."
+        cp /tmp/gradle-8.0/lib/plugins/gradle-wrapper-8.0.jar gradle/wrapper/gradle-wrapper.jar
         
-        # Копируем properties файл
-        cp /tmp/gradle-8.0/gradle/wrapper/gradle-wrapper.properties gradle/wrapper/gradle-wrapper.properties
+        # Создаём properties файл
+        echo "Creating gradle-wrapper.properties..."
+        cat > gradle/wrapper/gradle-wrapper.properties << 'EOF'
+distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.0-bin.zip
+networkTimeout=10000
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+EOF
         
         # Проверяем размер
-        echo "File size:"
+        echo "✅ File size:"
         ls -lh gradle/wrapper/gradle-wrapper.jar
         
         # Проверяем тип файла
-        echo "File type:"
+        echo "✅ File type:"
         file gradle/wrapper/gradle-wrapper.jar
         
         # Очистка
