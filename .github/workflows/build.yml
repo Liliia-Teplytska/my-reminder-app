@@ -24,20 +24,14 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-    
+      
     - name: Download and setup Gradle Wrapper
       run: |
         echo "Setting up Gradle Wrapper..."
         mkdir -p gradle/wrapper
         
-        echo "Downloading Gradle 8.0..."
-        curl -L https://services.gradle.org/distributions/gradle-8.0-bin.zip -o /tmp/gradle-8.0.zip
-        
-        echo "Extracting Gradle..."
-        unzip -q /tmp/gradle-8.0.zip -d /tmp/
-        
-        echo "Copying gradle-wrapper.jar from lib/plugins/..."
-        cp /tmp/gradle-8.0/lib/plugins/gradle-wrapper-8.0.jar gradle/wrapper/gradle-wrapper.jar
+        echo "Downloading gradle-wrapper.jar from official Gradle repository..."
+        curl -L https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
         
         echo "Creating gradle-wrapper.properties..."
         echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
@@ -52,8 +46,6 @@ jobs:
         
         echo "✅ File type:"
         file gradle/wrapper/gradle-wrapper.jar
-        
-        rm -rf /tmp/gradle-8.0 /tmp/gradle-8.0.zip
         
         echo "✅ Gradle Wrapper setup complete"
     
