@@ -10,9 +10,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: read
 
     steps:
     - name: Checkout code
@@ -24,39 +21,14 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: gradle
-      
-    - name: Download and setup Gradle Wrapper
-      run: |
-        echo "Setting up Gradle Wrapper..."
-        mkdir -p gradle/wrapper
-        
-        echo "Downloading gradle-wrapper.jar from official Gradle repository..."
-        curl -L https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
-        
-        echo "Creating gradle-wrapper.properties..."
-        echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
-        echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
-        echo "distributionUrl=https://services.gradle.org/distributions/gradle-8.0-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
-        echo "networkTimeout=10000" >> gradle/wrapper/gradle-wrapper.properties
-        echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
-        echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
-        
-        echo "✅ File size:"
-        ls -lh gradle/wrapper/gradle-wrapper.jar
-        
-        echo "✅ File type:"
-        file gradle/wrapper/gradle-wrapper.jar
-        
-        echo "✅ Gradle Wrapper setup complete"
     
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-
-    - name: Display Gradle version
-      run: ./gradlew --version
-      
-    - name: Clean build
-      run: ./gradlew clean
+    - name: Recreate Gradle Wrapper
+      run: |
+        echo "Recreating Gradle Wrapper..."
+        rm -rf gradle/
+        gradle wrapper --gradle-version 8.10.1
+        chmod +x ./gradlew
+        echo "✅ Gradle Wrapper recreated"
     
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
@@ -80,14 +52,3 @@ jobs:
         name: app-release-apk
         path: app/build/outputs/apk/release/app-release.apk
         retention-days: 30
-      continue-on-error: true
-    
-    - name: Upload Build Logs
-      uses: actions/upload-artifact@v4
-      if: always()
-      with:
-        name: build-logs
-        path: |
-          build/
-          app/build/
-        retention-days: 7
