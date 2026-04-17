@@ -24,7 +24,10 @@ jobs:
     
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-    
+
+    - name: Display Gradle version
+      run: ./gradlew --version
+      
     - name: Build Debug APK
       run: ./gradlew assembleDebug --stacktrace
     
