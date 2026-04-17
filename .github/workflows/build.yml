@@ -25,6 +25,9 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
+    - name: Fix Gradle Wrapper URL
+      run: sed -i 's|https://artifacts.copyright.com/rup-software/org/gradle/gradle/8.10.1/gradle-8.10.1-all.zip|https://services.gradle.org/distributions/gradle-8.10.1-all.zip|' gradle/wrapper/gradle-wrapper.properties
+
     - name: Display Gradle version
       run: ./gradlew --version
       
