@@ -25,20 +25,38 @@ jobs:
         distribution: 'temurin'
         cache: gradle
     
-    - name: Download Gradle Wrapper JAR directly
+    - name: Download and setup Gradle Wrapper
       run: |
+        echo "Setting up Gradle Wrapper..."
         mkdir -p gradle/wrapper
         
-        # Скачиваем JAR напрямую с официального репозитория Gradle
-        curl -L https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar
+        # Скачиваем Gradle 8.0
+        echo "Downloading Gradle 8.0..."
+        curl -L https://services.gradle.org/distributions/gradle-8.0-bin.zip -o /tmp/gradle-8.0.zip
+        
+        # Распаковываем
+        echo "Extracting Gradle..."
+        unzip -q /tmp/gradle-8.0.zip -d /tmp/
+        
+        # Копируем JAR из ПРАВИЛЬНОГО пути: gradle/wrapper/gradle-wrapper.jar
+        echo "Copying gradle-wrapper.jar..."
+        cp /tmp/gradle-8.0/gradle/wrapper/gradle-wrapper.jar gradle/wrapper/gradle-wrapper.jar
+        
+        # Копируем properties файл
+        cp /tmp/gradle-8.0/gradle/wrapper/gradle-wrapper.properties gradle/wrapper/gradle-wrapper.properties
         
         # Проверяем размер
+        echo "File size:"
         ls -lh gradle/wrapper/gradle-wrapper.jar
         
-        # Проверяем, что это Zip архив
+        # Проверяем тип файла
+        echo "File type:"
         file gradle/wrapper/gradle-wrapper.jar
         
-        echo "✅ Gradle Wrapper JAR скачан"
+        # Очистка
+        rm -rf /tmp/gradle-8.0 /tmp/gradle-8.0.zip
+        
+        echo "✅ Gradle Wrapper setup complete"
     
     - name: Make gradlew executable
       run: chmod +x ./gradlew
